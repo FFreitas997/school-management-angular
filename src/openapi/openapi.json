@@ -1,0 +1,4518 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "School Management System",
+    "description": "API for School Management System",
+    "contact": {
+      "name": "Francisco Freitas",
+      "url": "https://www.linkedin.com/in/francisco-freitas-a289b91b3",
+      "email": "francisco.freitas.ff@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0"
+  },
+  "externalDocs": {
+    "description": "Spring Boot Documentation",
+    "url": "https://spring.io/projects/spring-boot"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Local Server"
+    },
+    {
+      "url": "https://school-management-system-spring.herokuapp.com",
+      "description": "Production Server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Admin Operations",
+      "description": "These operations are specific to admin users"
+    },
+    {
+      "name": "Student Features",
+      "description": "These operations are related to students."
+    },
+    {
+      "name": "Parent Features",
+      "description": "These operations are related to the parent of the student."
+    },
+    {
+      "name": "Actuator",
+      "description": "Monitor and interact",
+      "externalDocs": {
+        "description": "Spring Boot Actuator Web API Documentation",
+        "url": "https://docs.spring.io/spring-boot/docs/current/actuator-api/html/"
+      }
+    },
+    {
+      "name": "Authentication",
+      "description": "These operations are related to the Authentication"
+    },
+    {
+      "name": "Users Management System",
+      "description": "Endpoints for managing users in the system."
+    },
+    {
+      "name": "Teacher Features",
+      "description": "These operations allow the Teacher user to manage their account."
+    },
+    {
+      "name": "School Features",
+      "description": "These operations are related to the school access features."
+    }
+  ],
+  "paths": {
+    "/api/v1/auth/activate-account": {
+      "put": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Activate account",
+        "description": "Activate the account of a user in the system.",
+        "operationId": "confirmAccount",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/users/profile-image": {
+      "get": {
+        "tags": [
+          "Users Management System"
+        ],
+        "summary": "Download User Image",
+        "description": "Download user image in the system.",
+        "operationId": "downloadUserImage",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Users Management System"
+        ],
+        "summary": "Upload User Image",
+        "description": "Upload user image in the system.",
+        "operationId": "uploadUserImage",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Teacher Information",
+        "description": "Get Teacher Information",
+        "operationId": "getTeacherInformation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Teacher Registration",
+        "description": "Allow the Teacher user to register in the system.",
+        "operationId": "registerTeacher",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestTeacher"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/api/v1/teacher/textbook": {
+      "post": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Textbook Creation",
+        "description": "Create a textbook",
+        "operationId": "createTextBook",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestTextBook"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/assignment": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Assignments by Course and Delivery",
+        "description": "Get all assignments by course and delivery date",
+        "operationId": "getAssignmentsByCourseAndDelivery",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delivery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageAssignmentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Assignment Creation",
+        "description": "Create an assignment",
+        "operationId": "createAssignment",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestAssignment"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Assignment Disabling",
+        "description": "Disable an assignment",
+        "operationId": "disableAssignment",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delivery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/student": {
+      "get": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Get student information",
+        "description": "This operation retrieves the student information.",
+        "operationId": "getStudentInformation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentInformation"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Register a student",
+        "description": "This operation registers a student.",
+        "operationId": "register",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestStudent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/api/v1/parent": {
+      "get": {
+        "tags": [
+          "Parent Features"
+        ],
+        "summary": "Parent Information",
+        "description": "This operation is used to get the parent information.",
+        "operationId": "getParentInformation_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Parent Features"
+        ],
+        "summary": "Register a parent",
+        "description": "This operation is used to register a parent.",
+        "operationId": "registerParent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestParent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/refresh-token": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Refresh token",
+        "description": "Refresh the token of a user in the system.",
+        "operationId": "refreshToken",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/generate-activation-code": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Generate activation code",
+        "description": "Generate an activation code for a user in the system.",
+        "operationId": "generateActivationCode",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        }
+      }
+    },
+    "/api/v1/auth/authenticate": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authenticate a user",
+        "description": "Authenticate a user in the system",
+        "operationId": "authenticate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AuthenticationRequestDto"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/school": {
+      "post": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Create School",
+        "description": "Create a new school.",
+        "operationId": "createSchool",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestSchool"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/register": {
+      "post": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Register User",
+        "description": "Register a new admin user with the provided details.",
+        "operationId": "register_1",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUser"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/management-server/loggers/{name}": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'loggers-name'",
+        "operationId": "loggers-name",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'loggers-name'",
+        "operationId": "loggers-name_2",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string",
+                "enum": [
+                  "TRACE",
+                  "DEBUG",
+                  "INFO",
+                  "WARN",
+                  "ERROR",
+                  "FATAL",
+                  "OFF"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/custom-endpoint": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'custom-endpoint'",
+        "operationId": "custom-endpoint",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'custom-endpoint'",
+        "operationId": "custom-endpoint_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/event": {
+      "post": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Create Event",
+        "description": "Create a new event.",
+        "operationId": "createEvent",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestEvent"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/course": {
+      "post": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Create Course",
+        "description": "Create a new course.",
+        "operationId": "createCourse",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestCourse"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/textbook/{textBookID}/cover": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Textbook Cover Download",
+        "description": "Download the cover of a textbook",
+        "operationId": "downloadTextBookCover",
+        "parameters": [
+          {
+            "name": "textBookID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Textbook Cover Upload",
+        "description": "Upload the cover of a textbook",
+        "operationId": "uploadTextBookCover",
+        "parameters": [
+          {
+            "name": "textBookID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "file"
+                ],
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/student/responsibility": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "All associated students",
+        "description": "Get all students associated with the teacher",
+        "operationId": "getAllAssociatedStudents",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/StudentResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Associate Student",
+        "description": "Associate a student to the teacher",
+        "operationId": "associateStudent",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/course/textbook": {
+      "patch": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Course and Textbook Association",
+        "description": "Attach a textbook to a course",
+        "operationId": "associateTextBookToCourse",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "textBookISBN",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/course/student": {
+      "patch": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Course and Students Association",
+        "description": "Attach students to a course",
+        "operationId": "associateStudentsToCourse",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/assignment/feedback": {
+      "patch": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Assignment Feedback",
+        "description": "Submit feedback for an assignment",
+        "operationId": "submitFeedback",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestFeedback"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/parent/student": {
+      "get": {
+        "tags": [
+          "Parent Features"
+        ],
+        "summary": "Get student information",
+        "description": "This operation is used to get the student information.",
+        "operationId": "getStudentForParent",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Parent Features"
+        ],
+        "summary": "Associate a student",
+        "description": "This operation is used to associate a student to a parent.",
+        "operationId": "associateStudentForParent",
+        "parameters": [
+          {
+            "name": "studentEmail",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/course/associate": {
+      "patch": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Associate Teacher to Course",
+        "description": "Associate a teacher to a course.",
+        "operationId": "associateTeacherToCourse",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "teacherEmail",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Accepted"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "tags": [
+          "Users Management System"
+        ],
+        "summary": "Get all users",
+        "description": "Get all users in the system.",
+        "operationId": "getAllUsers",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUserDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/{userID}": {
+      "get": {
+        "tags": [
+          "Users Management System"
+        ],
+        "summary": "Get user by ID",
+        "description": "Get user by ID in the system.",
+        "operationId": "getUserById",
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Users Management System"
+        ],
+        "summary": "Delete user",
+        "description": "Delete user in the system.",
+        "operationId": "deleteUser",
+        "parameters": [
+          {
+            "name": "userID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/student/search": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Search Student",
+        "description": "Search for a student by first name, last name or email",
+        "operationId": "searchStudent",
+        "parameters": [
+          {
+            "name": "firstName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "lastName",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageStudentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/course": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Teacher Courses",
+        "description": "Get all courses associated with the teacher",
+        "operationId": "getCourses",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageCourseResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/course/{courseCode}": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Course Information",
+        "description": "Get information about a course",
+        "operationId": "getCourseInformation",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CourseResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/course/{courseCode}/textbook": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Textbook Course",
+        "description": "List of textbooks by course",
+        "operationId": "getTextBookInformation",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TextBookResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/course/{courseCode}/student": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Students by Course",
+        "description": "Get all students associated with a course",
+        "operationId": "getStudentsByCourse",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageStudentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/teacher/assignment/{courseCode}/{studentID}": {
+      "get": {
+        "tags": [
+          "Teacher Features"
+        ],
+        "summary": "Assignment by Course, Delivery and Student",
+        "description": "Get an assignment by course, delivery date and student",
+        "operationId": "getAssignmentByCourseAndDeliveryAndStudent",
+        "parameters": [
+          {
+            "name": "courseCode",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "delivery",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "studentID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AssignmentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/student/teacher": {
+      "get": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Get teacher responsible for",
+        "description": "This operation retrieves the teacher responsible for the student.",
+        "operationId": "getTeacherResponsibleFor",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TeacherResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/student/parent": {
+      "get": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Get parent information",
+        "description": "This operation retrieves the student's parent information.",
+        "operationId": "getParentInformation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/student/courses": {
+      "get": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Get enrolled courses",
+        "description": "This operation retrieves the courses in which the student is enrolled.",
+        "operationId": "enrolledCourses",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageCourseResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/student/assignments": {
+      "get": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Get all assignments",
+        "description": "This operation retrieves all student assignments.",
+        "operationId": "getAllAssignments",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageAssignmentResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/student/assignments/future": {
+      "get": {
+        "tags": [
+          "Student Features"
+        ],
+        "summary": "Get future assignments",
+        "description": "This operation retrieves the student's future assignments.",
+        "operationId": "getFutureAssignments",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AssignmentResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/school/{schoolId}/events/future": {
+      "get": {
+        "tags": [
+          "School Features"
+        ],
+        "summary": "Get all future events by school id",
+        "description": "This operation retrieves all future events by school id.",
+        "operationId": "getFutureEvents",
+        "parameters": [
+          {
+            "name": "schoolId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EventResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/school/all": {
+      "get": {
+        "tags": [
+          "School Features"
+        ],
+        "summary": "Get all schools",
+        "description": "This operation retrieves all schools and it doesn't require any authentication.",
+        "operationId": "getSchools",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SchoolResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/teachers": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Get Teachers",
+        "description": "Get a list of teachers.",
+        "operationId": "getTeachers",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseTeacher"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/students": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Get Students",
+        "description": "Get a list of students.",
+        "operationId": "getStudents",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseStudent"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/schools": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Get Schools",
+        "description": "Get a list of schools.",
+        "operationId": "getSchools_1",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SchoolResponse"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/parents": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Get Parents",
+        "description": "Get a list of parents.",
+        "operationId": "getParents",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseParent"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/management-server": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator root web endpoint",
+        "operationId": "links",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/Link"
+                    }
+                  }
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/Link"
+                    }
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/components/schemas/Link"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/threaddump": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'threaddump'",
+        "operationId": "threaddump",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain;charset=UTF-8": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/scheduledtasks": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'scheduledtasks'",
+        "operationId": "scheduledtasks",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/metrics": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'metrics'",
+        "operationId": "metrics",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/metrics/{requiredMetricName}": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'metrics-requiredMetricName'",
+        "operationId": "metrics-requiredMetricName",
+        "parameters": [
+          {
+            "name": "requiredMetricName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/mappings": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'mappings'",
+        "operationId": "mappings",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/loggers": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'loggers'",
+        "operationId": "loggers",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/logfile": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'logfile'",
+        "operationId": "logfile",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain;charset=UTF-8": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/info": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'info'",
+        "operationId": "info",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/heapdump": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'heapdump'",
+        "operationId": "heapdump",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/health": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'health'",
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/health/**": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'health-path'",
+        "operationId": "health-path",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/env": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'env'",
+        "operationId": "env",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/env/{toMatch}": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'env-toMatch'",
+        "operationId": "env-toMatch",
+        "parameters": [
+          {
+            "name": "toMatch",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/configprops": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'configprops'",
+        "operationId": "configprops",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/configprops/{prefix}": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'configprops-prefix'",
+        "operationId": "configprops-prefix",
+        "parameters": [
+          {
+            "name": "prefix",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/conditions": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'conditions'",
+        "operationId": "conditions",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/caches": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'caches'",
+        "operationId": "caches",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'caches'",
+        "operationId": "caches_2",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/caches/{cache}": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'caches-cache'",
+        "operationId": "caches-cache",
+        "parameters": [
+          {
+            "name": "cache",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'caches-cache'",
+        "operationId": "caches-cache_2",
+        "parameters": [
+          {
+            "name": "cache",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/management-server/beans": {
+      "get": {
+        "tags": [
+          "Actuator"
+        ],
+        "summary": "Actuator web endpoint 'beans'",
+        "operationId": "beans",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/vnd.spring-boot.actuator.v3+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/vnd.spring-boot.actuator.v2+json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/events": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Get Events",
+        "description": "Get a list of events.",
+        "operationId": "getEvents",
+        "parameters": [
+          {
+            "name": "schoolId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageEventResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
+    "/api/v1/admin/courses": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Get Courses",
+        "description": "Get a list of courses.",
+        "operationId": "getCourses_1",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseCourse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestTeacher": {
+        "required": [
+          "department",
+          "email",
+          "firstName",
+          "lastName",
+          "password",
+          "phoneNumber",
+          "schoolID"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "maxLength": 100,
+            "minLength": 5,
+            "type": "string"
+          },
+          "lastName": {
+            "maxLength": 100,
+            "minLength": 5,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 255,
+            "minLength": 6,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 255,
+            "minLength": 8,
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "educationQualifications": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string"
+          },
+          "experience": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string"
+          },
+          "recognition": {
+            "maxLength": 300,
+            "minLength": 0,
+            "type": "string"
+          },
+          "teachMethod": {
+            "type": "string"
+          },
+          "schoolID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RequestTextBook": {
+        "required": [
+          "author",
+          "cost",
+          "isbn",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "edition": {
+            "type": "string"
+          },
+          "isbn": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "link": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestAssignment": {
+        "required": [
+          "assignmentType",
+          "courseCode",
+          "deliverAssignment",
+          "description",
+          "submissionType",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "courseCode": {
+            "type": "string"
+          },
+          "deliverAssignment": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "submissionType": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "OFFLINE"
+            ]
+          },
+          "assignmentType": {
+            "type": "string",
+            "enum": [
+              "HOMEWORK",
+              "QUIZ",
+              "TEST"
+            ]
+          }
+        }
+      },
+      "RequestStudent": {
+        "required": [
+          "birthDate",
+          "email",
+          "firstName",
+          "gradeLevel",
+          "lastName",
+          "password",
+          "schoolID"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "studentIdentification": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "medicalInformation": {
+            "type": "string"
+          },
+          "schoolID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RequestParent": {
+        "required": [
+          "email",
+          "firstName",
+          "lastName",
+          "occupation",
+          "password",
+          "phoneNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOTHER",
+              "FATHER",
+              "OTHER"
+            ]
+          },
+          "occupation": {
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticationRequestDto": {
+        "required": [
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "maxLength": 255,
+            "minLength": 6,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 255,
+            "minLength": 8,
+            "type": "string"
+          }
+        }
+      },
+      "AuthenticationResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "refresh_token": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestSchool": {
+        "required": [
+          "address",
+          "email",
+          "name",
+          "phoneNumber",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "PRIMARY",
+              "SECONDARY",
+              "HIGH_SCHOOL",
+              "UNIVERSITY",
+              "OTHER"
+            ]
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "maxLength": 9,
+            "minLength": 9,
+            "type": "string"
+          },
+          "facebookURL": {
+            "type": "string"
+          },
+          "instagramURL": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestUser": {
+        "required": [
+          "description",
+          "email",
+          "firstName",
+          "lastName",
+          "password",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "ADMIN",
+              "TEACHER",
+              "STUDENT",
+              "PARENT"
+            ]
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestEvent": {
+        "required": [
+          "description",
+          "end",
+          "schoolID",
+          "start",
+          "title",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MEETING",
+              "EXAM",
+              "CLASS"
+            ]
+          },
+          "schoolID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RequestCourse": {
+        "required": [
+          "courseCode",
+          "courseDescription",
+          "courseName",
+          "gradeLevel"
+        ],
+        "type": "object",
+        "properties": {
+          "courseName": {
+            "type": "string"
+          },
+          "courseDescription": {
+            "type": "string"
+          },
+          "preRequisites": {
+            "type": "string"
+          },
+          "room": {
+            "type": "string"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          }
+        }
+      },
+      "RequestFeedback": {
+        "required": [
+          "courseCode",
+          "delivery",
+          "feedback",
+          "grade",
+          "studentID"
+        ],
+        "type": "object",
+        "properties": {
+          "feedback": {
+            "type": "string"
+          },
+          "grade": {
+            "maximum": 20,
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "delivery": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "studentID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PageUserDto": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserDto"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "pageNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageSize": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unpaged": {
+            "type": "boolean"
+          },
+          "paged": {
+            "type": "boolean"
+          }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string"
+          },
+          "nullHandling": {
+            "type": "string"
+          },
+          "ascending": {
+            "type": "boolean"
+          },
+          "property": {
+            "type": "string"
+          },
+          "ignoreCase": {
+            "type": "boolean"
+          }
+        }
+      },
+      "UserDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "authorities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TeacherResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "educationQualification": {
+            "type": "string"
+          },
+          "experience": {
+            "type": "string"
+          },
+          "recognition": {
+            "type": "string"
+          },
+          "teachMethod": {
+            "type": "string"
+          },
+          "schoolName": {
+            "type": "string"
+          },
+          "schoolID": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "PageStudentResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StudentResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StudentResponse": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "studentIdentification": {
+            "type": "string"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "medicalInformation": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "schoolName": {
+            "type": "string"
+          },
+          "schoolID": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "CourseResponse": {
+        "type": "object",
+        "properties": {
+          "courseName": {
+            "type": "string"
+          },
+          "courseDescription": {
+            "type": "string"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "preRequisites": {
+            "type": "string"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schoolId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "schoolName": {
+            "type": "string"
+          },
+          "textBooks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TextBookDto"
+            }
+          }
+        }
+      },
+      "PageCourseResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TextBookDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          }
+        }
+      },
+      "TextBookResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "edition": {
+            "type": "string"
+          },
+          "isbn": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "link": {
+            "type": "string"
+          }
+        }
+      },
+      "AssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "studentID": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "delivery": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "submissionType": {
+            "type": "string",
+            "enum": [
+              "ONLINE",
+              "OFFLINE"
+            ]
+          },
+          "assignmentType": {
+            "type": "string",
+            "enum": [
+              "HOMEWORK",
+              "QUIZ",
+              "TEST"
+            ]
+          },
+          "grade": {
+            "type": "number",
+            "format": "double"
+          },
+          "feedback": {
+            "type": "string"
+          }
+        }
+      },
+      "PageAssignmentResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssignmentResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "StudentInformation": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "studentIdentification": {
+            "type": "string"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "medicalInformation": {
+            "type": "string"
+          }
+        }
+      },
+      "ParentResponse": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOTHER",
+              "FATHER",
+              "OTHER"
+            ]
+          },
+          "occupation": {
+            "type": "string"
+          }
+        }
+      },
+      "EventResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MEETING",
+              "EXAM",
+              "CLASS"
+            ]
+          },
+          "location": {
+            "type": "string"
+          }
+        }
+      },
+      "SchoolResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "facebookURL": {
+            "type": "string"
+          },
+          "instagramURL": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string"
+          },
+          "schoolType": {
+            "type": "string",
+            "enum": [
+              "PRIMARY",
+              "SECONDARY",
+              "HIGH_SCHOOL",
+              "UNIVERSITY",
+              "OTHER"
+            ]
+          }
+        }
+      },
+      "StudentDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "studentIdentification": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "medicalInformation": {
+            "type": "string"
+          }
+        }
+      },
+      "SchoolDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "facebookURL": {
+            "type": "string"
+          },
+          "instagramURL": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string"
+          },
+          "city": {
+            "type": "string"
+          },
+          "zipCode": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "TeacherDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "educationQualification": {
+            "type": "string"
+          },
+          "experience": {
+            "type": "string"
+          },
+          "recognition": {
+            "type": "string"
+          },
+          "teachMethod": {
+            "type": "string"
+          }
+        }
+      },
+      "PageResponseTeacher": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseTeacher"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ResponseTeacher": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "educationQualification": {
+            "type": "string"
+          },
+          "experience": {
+            "type": "string"
+          },
+          "recognition": {
+            "type": "string"
+          },
+          "teachMethod": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseStudent": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseStudent"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ResponseStudent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          },
+          "studentIdentification": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "medicalInformation": {
+            "type": "string"
+          }
+        }
+      },
+      "PageResponseParent": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseParent"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ResponseParent": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "isEnabled": {
+            "type": "boolean"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "MOTHER",
+              "FATHER",
+              "OTHER"
+            ]
+          },
+          "occupation": {
+            "type": "string"
+          },
+          "studentResponsible": {
+            "$ref": "#/components/schemas/StudentDto"
+          }
+        }
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "href": {
+            "type": "string"
+          },
+          "templated": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageEventResponse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EventResponse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "PageResponseCourse": {
+        "type": "object",
+        "properties": {
+          "totalElements": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "totalPages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "size": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseCourse"
+            }
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "sort": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SortObject"
+            }
+          },
+          "first": {
+            "type": "boolean"
+          },
+          "last": {
+            "type": "boolean"
+          },
+          "numberOfElements": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject"
+          },
+          "empty": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ResponseCourse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "courseName": {
+            "type": "string"
+          },
+          "courseDescription": {
+            "type": "string"
+          },
+          "preRequisites": {
+            "type": "string"
+          },
+          "room": {
+            "type": "string"
+          },
+          "courseCode": {
+            "type": "string"
+          },
+          "gradeLevel": {
+            "type": "string",
+            "enum": [
+              "FIRST_GRADE",
+              "SECOND_GRADE",
+              "THIRD_GRADE",
+              "FOURTH_GRADE",
+              "FIFTH_GRADE",
+              "SIXTH_GRADE",
+              "SEVENTH_GRADE",
+              "EIGHTH_GRADE",
+              "NINTH_GRADE",
+              "TENTH_GRADE",
+              "ELEVENTH_GRADE",
+              "TWELFTH_GRADE"
+            ]
+          },
+          "teacher": {
+            "$ref": "#/components/schemas/TeacherDto"
+          },
+          "school": {
+            "$ref": "#/components/schemas/SchoolDto"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JSON Web Token (JWT)": {
+        "type": "http",
+        "description": "JSON Web Token (JWT) is an open standard (RFC 7519) that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed. JWTs can be signed using a secret (with the HMAC algorithm) or a public/private key pair using RSA or ECDSA.",
+        "in": "header",
+        "scheme": "Bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
