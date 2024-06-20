@@ -1,0 +1,53 @@
+<div class="login-container">
+  <mat-card>
+
+    <mat-card-header>
+      <mat-card-title>Login</mat-card-title>
+      <i class="fa-solid fa-lock login-icon"></i>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field>
+          <mat-label>Email address</mat-label>
+          <input matInput placeholder="example@gmail.com" formControlName="username">
+          <mat-hint>Please provide a valid email</mat-hint>
+          <mat-error *ngIf="username?.hasError('required')">
+            Email is required
+          </mat-error>
+          <mat-error *ngIf="username?.hasError('email')">
+            Email is invalid
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="password" formControlName="password" type="password">
+          <mat-hint>Minimum 8 characters (letters and numbers)</mat-hint>
+          <mat-error *ngIf="password?.hasError('required')">
+            Password is required
+          </mat-error>
+          <mat-error *ngIf="password?.hasError('minlength')">
+            Password must be at least 8 characters
+          </mat-error>
+          <mat-error *ngIf="password?.hasError('pattern')">
+            Password must contain letters & numbers
+          </mat-error>
+        </mat-form-field>
+
+        <div class="login-action">
+          <button *ngIf="!isLoading" mat-raised-button type="submit" [disabled]="loginForm.invalid">Submit</button>
+          <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+          <span *ngIf="!isLoading" style="margin-top: 1rem">Don't have an account?&nbsp;<a target="_self" [routerLink]="['/register']">Register here!</a></span>
+        </div>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>
+
+
+
+<!--TODO link to the registration page-->
