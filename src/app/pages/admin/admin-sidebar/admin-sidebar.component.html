@@ -1,0 +1,17 @@
+<h4>Admin Navigation</h4>
+
+<mat-nav-list>
+
+  @for (element of sidebar; track element.name) {
+
+    <mat-list-item [activated]="element.isActive">
+      <mat-icon matListItemIcon>{{ element.icon }}</mat-icon>
+      <a matListItemTitle routerLink="{{element.route}}">{{ element.name }}</a>
+    </mat-list-item>
+
+  }
+
+</mat-nav-list>
+
+
+

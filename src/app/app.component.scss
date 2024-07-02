@@ -1,0 +1,51 @@
+.main-container{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.header{
+  width: 100%;
+  height: 6%;
+  background-color: #ffd9e1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 50px;
+}
+
+.main-content{
+  width: 100%;
+  height: 94%;
+  overflow-y: auto;
+}
+
+.brand{
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.tools{
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.logo{
+  width: 100%;
+  height: 100%;
+}
+
+.title{
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ff5e78;
+  white-space: nowrap;
+}

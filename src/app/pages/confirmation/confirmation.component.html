@@ -1,1 +1,31 @@
-<p>confirmation works!</p>
+<div class="container">
+
+  @switch (currentState) {
+
+    @case (ConfirmationState.CONFIRMED) {
+      <div class="success-block">
+        <h3>Thank you for confirming your email address!</h3>
+        <p>You can now login to your account.</p>
+      </div>
+    }
+
+    @case (ConfirmationState.ERROR) {
+      <div class="error-block">
+        <h3>Oops! Something went wrong.</h3>
+        <p>It seems that the confirmation link is invalid or expired.</p>
+      </div>
+    }
+
+    @case (ConfirmationState.LOADING) {
+      <mat-spinner [diameter]="100"></mat-spinner>
+    }
+
+    @default {
+      <div class="code-block">
+        <h3>Type your activation code</h3>
+        <code-input (codeCompleted)="onSubmit($event)" [isCodeHidden]="false" [codeLength]="6" [code]="'number'"></code-input>
+      </div>
+    }
+  }
+
+</div>

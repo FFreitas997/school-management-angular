@@ -1,3 +1,21 @@
-<!-- TODO general header -->
+<div class="main-container">
+  <div class="header">
+    <div routerLink="/" class="brand">
+      <img class="logo" alt="brand" ngSrc="assets/logo.png" height="796" width="800" priority>
+      <span class="title">School Management</span>
+    </div>
+    <div class="tools">
+      <button mat-icon-button matTooltip="Share">
+        <mat-icon>share</mat-icon>
+      </button>
+      <button routerLink="/login" mat-icon-button matTooltip="Login">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div class="main-content">
+    <router-outlet/>
+  </div>
+</div>
 
-<router-outlet />
+

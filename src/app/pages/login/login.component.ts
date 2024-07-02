@@ -7,11 +7,11 @@ import {MatButtonModule} from "@angular/material/button";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatCardModule} from "@angular/material/card";
 import {MatProgressBarModule} from "@angular/material/progress-bar";
-import {RouterLink} from "@angular/router";
+import {Router, RouterLink} from "@angular/router";
 import {AuthenticationService} from "../../api/services/authentication.service";
 import {AuthenticationRequestDto} from "../../api/models/authentication-request-dto";
-import {TokenService} from "../../services/token.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-login',
@@ -29,8 +29,9 @@ export class LoginComponent implements OnInit {
   })
 
   constructor(
+    private router: Router,
     private service: AuthenticationService,
-    private tokenService: TokenService,
+    private authService: AuthService,
     private snackBar: MatSnackBar
   ) {
   }
@@ -61,10 +62,10 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
-          this.tokenService.saveToken(response.access_token as string);
-          // redirect based on a role
+          this.authService.storeAccessToken(response.access_token as string);
+          this.router.navigate(['/homepage']).then();
         },
-        error: (error) => {
+        error: (__) => {
           this.isLoading = false;
           this.snackBar.open('Something went wrong. Please try again', 'OK', {duration: 5000});
         }

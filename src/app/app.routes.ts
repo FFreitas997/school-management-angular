@@ -3,10 +3,7 @@ import {HomeComponent} from "./pages/home/home.component";
 import {LoginComponent} from "./pages/login/login.component";
 import {RegisterComponent} from "./pages/register/register.component";
 import {ConfirmationComponent} from "./pages/confirmation/confirmation.component";
-import {TeacherComponent} from "./pages/teacher/teacher.component";
-import {StudentComponent} from "./pages/student/student.component";
-import {ParentComponent} from "./pages/parent/parent.component";
-import {AdminComponent} from "./pages/admin/admin.component";
+import {adminGuard} from "./guard/admin.guard";
 
 export const routes: Routes = [
   {
@@ -27,25 +24,32 @@ export const routes: Routes = [
   {
     path: 'register',
     component: RegisterComponent,
+    title: 'Register Page'
   },
   {
     path: 'confirmation',
     component: ConfirmationComponent,
+    title: 'Confirmation Page'
   },
   {
+    path: 'admin',
+    canActivate: [adminGuard],
+    loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule),
+  }
+/*  {
     path: 'teacher',
     component: TeacherComponent,
+    title: 'Teacher Page'
   },
   {
     path: 'student',
     component: StudentComponent,
+    title: 'Student Page'
   },
-  {
-    path: 'admin',
-    component: AdminComponent,
-  },
+
   {
     path: 'parent',
     component: ParentComponent,
-  }
+    title: 'Parent Page'
+  }*/
 ];

@@ -1,0 +1,40 @@
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.code-block{
+  border: 3px solid #fdb0c0;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin: auto;
+  max-width: 60vw;
+
+  h3{
+    text-align: center;
+    margin: 1rem;
+    padding: 1rem;
+  }
+}
+
+code-input {
+  --item-spacing: 1.5rem;
+  --item-border-radius: 20px;
+  font-size: 2vw;
+}
+
+.error-block{
+  text-align: center;
+  padding: 1.5rem;
+  margin: 1.5rem;
+  color: #f94449;
+}
+
+.success-block{
+  text-align: center;
+  padding: 1.5rem;
+  margin: 1.5rem;
+  color: #6FC276;
+}
