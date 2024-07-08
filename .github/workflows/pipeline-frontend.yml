@@ -5,6 +5,7 @@ on:
     branches: [release]
 
 jobs:
+
   build-image:
     name: Build Angular Application Docker Image
     runs-on: ubuntu-latest
