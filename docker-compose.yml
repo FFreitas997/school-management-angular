@@ -1,0 +1,14 @@
+services:
+
+  angular-application:
+    image: school-management-angular:1.0.0
+    container_name: school-management-angular
+    ports:
+      - 4200:80
+    networks:
+        - school-management-angular-network # same network as the backend
+    restart: unless-stopped
+
+networks:
+  school-management-angular-network:
+    driver: bridge
