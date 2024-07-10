@@ -1,6 +1,7 @@
 import {CanActivateFn, Router} from '@angular/router';
 import {inject} from "@angular/core";
 import {AuthService} from "../services/auth.service";
+import {UserRole} from "../services/user-role";
 
 export const adminGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -11,7 +12,7 @@ export const adminGuard: CanActivateFn = () => {
     return false;
   }
 
-  if (authService.currentUser.role !== 'admin') {
+  if (authService.getCurrentUser() !== UserRole.ADMIN) {
     router.navigate(['/login']).then();
     return false;
   }

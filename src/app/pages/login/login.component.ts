@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
         next: (response) => {
           this.isLoading = false;
           this.authService.storeAccessToken(response.access_token as string);
-          this.router.navigate(['/homepage']).then();
+          this.router.navigate(['/home']).then();
         },
         error: (__) => {
           this.isLoading = false;

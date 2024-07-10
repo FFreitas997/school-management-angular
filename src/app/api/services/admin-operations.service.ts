@@ -9,6 +9,7 @@ import { BaseService } from '../base-service';
 import { ApiConfiguration } from '../api-configuration';
 import { StrictHttpResponse } from '../strict-http-response';
 
+import { AdminResponse } from '../models/admin-response';
 import { associateTeacherToCourse } from '../fn/admin-operations/associate-teacher-to-course';
 import { AssociateTeacherToCourse$Params } from '../fn/admin-operations/associate-teacher-to-course';
 import { createCourse } from '../fn/admin-operations/create-course';
@@ -17,6 +18,8 @@ import { createEvent } from '../fn/admin-operations/create-event';
 import { CreateEvent$Params } from '../fn/admin-operations/create-event';
 import { createSchool } from '../fn/admin-operations/create-school';
 import { CreateSchool$Params } from '../fn/admin-operations/create-school';
+import { getAdminInformation } from '../fn/admin-operations/get-admin-information';
+import { GetAdminInformation$Params } from '../fn/admin-operations/get-admin-information';
 import { getCourses1 } from '../fn/admin-operations/get-courses-1';
 import { GetCourses1$Params } from '../fn/admin-operations/get-courses-1';
 import { getEvents } from '../fn/admin-operations/get-events';
@@ -210,6 +213,39 @@ export class AdminOperationsService extends BaseService {
   associateTeacherToCourse(params: AssociateTeacherToCourse$Params, context?: HttpContext): Observable<void> {
     return this.associateTeacherToCourse$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getAdminInformation()` */
+  static readonly GetAdminInformationPath = '/api/v1/admin';
+
+  /**
+   * Administrator Information.
+   *
+   * Get information about the administrator.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getAdminInformation()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAdminInformation$Response(params?: GetAdminInformation$Params, context?: HttpContext): Observable<StrictHttpResponse<AdminResponse>> {
+    return getAdminInformation(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Administrator Information.
+   *
+   * Get information about the administrator.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getAdminInformation$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getAdminInformation(params?: GetAdminInformation$Params, context?: HttpContext): Observable<AdminResponse> {
+    return this.getAdminInformation$Response(params, context).pipe(
+      map((r: StrictHttpResponse<AdminResponse>): AdminResponse => r.body)
     );
   }
 

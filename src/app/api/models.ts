@@ -1,5 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
+export { AdminResponse } from './models/admin-response';
 export { AssignmentResponse } from './models/assignment-response';
 export { AuthenticationRequestDto } from './models/authentication-request-dto';
 export { AuthenticationResponse } from './models/authentication-response';

@@ -1269,6 +1269,33 @@
         ]
       }
     },
+    "/api/v1/users/role": {
+      "get": {
+        "tags": [
+          "Users Management System"
+        ],
+        "summary": "Get User Role",
+        "description": "Get user role in the system.",
+        "operationId": "getUserRole",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
+      }
+    },
     "/api/v1/teacher/student/search": {
       "get": {
         "tags": [
@@ -1825,6 +1852,33 @@
             }
           }
         }
+      }
+    },
+    "/api/v1/admin": {
+      "get": {
+        "tags": [
+          "Admin Operations"
+        ],
+        "summary": "Administrator Information",
+        "description": "Get information about the administrator.",
+        "operationId": "getAdminInformation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JSON Web Token (JWT)": []
+          }
+        ]
       }
     },
     "/api/v1/admin/teachers": {
@@ -3381,10 +3435,10 @@
             "type": "integer",
             "format": "int32"
           },
-          "unpaged": {
+          "paged": {
             "type": "boolean"
           },
-          "paged": {
+          "unpaged": {
             "type": "boolean"
           }
         }
@@ -4069,6 +4123,23 @@
             "type": "string"
           },
           "teachMethod": {
+            "type": "string"
+          }
+        }
+      },
+      "AdminResponse": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "description": {
             "type": "string"
           }
         }

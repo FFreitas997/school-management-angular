@@ -1,17 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Subject} from "rxjs";
 import {JwtHelperService} from "@auth0/angular-jwt";
+import {UserRole} from "./user-role";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  public user: Subject<any> = new Subject<any>();
-  public currentUser: any = null;
-
-  constructor() {
-  }
+  constructor() {}
 
   public storeAccessToken(token: string): void {
     localStorage.setItem('access_token', JSON.stringify(token));
@@ -19,6 +16,15 @@ export class AuthService {
 
   public getAccessToken(): string | null {
     return localStorage.getItem('access_token');
+  }
+
+  public storeCurrentUser(role: string): void {
+    localStorage.setItem('current_user', role);
+  }
+
+  public getCurrentUser(): UserRole {
+    const role = localStorage.getItem('current_user');
+    return UserRole[role as keyof typeof UserRole]
   }
 
   public isTokenInvalid(): boolean {

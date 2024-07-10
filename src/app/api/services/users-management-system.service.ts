@@ -17,6 +17,8 @@ import { getAllUsers } from '../fn/users-management-system/get-all-users';
 import { GetAllUsers$Params } from '../fn/users-management-system/get-all-users';
 import { getUserById } from '../fn/users-management-system/get-user-by-id';
 import { GetUserById$Params } from '../fn/users-management-system/get-user-by-id';
+import { getUserRole } from '../fn/users-management-system/get-user-role';
+import { GetUserRole$Params } from '../fn/users-management-system/get-user-role';
 import { PageUserDto } from '../models/page-user-dto';
 import { uploadUserImage } from '../fn/users-management-system/upload-user-image';
 import { UploadUserImage$Params } from '../fn/users-management-system/upload-user-image';
@@ -194,6 +196,39 @@ export class UsersManagementSystemService extends BaseService {
   deleteUser(params: DeleteUser$Params, context?: HttpContext): Observable<void> {
     return this.deleteUser$Response(params, context).pipe(
       map((r: StrictHttpResponse<void>): void => r.body)
+    );
+  }
+
+  /** Path part for operation `getUserRole()` */
+  static readonly GetUserRolePath = '/api/v1/users/role';
+
+  /**
+   * Get User Role.
+   *
+   * Get user role in the system.
+   *
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `getUserRole()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserRole$Response(params?: GetUserRole$Params, context?: HttpContext): Observable<StrictHttpResponse<string>> {
+    return getUserRole(this.http, this.rootUrl, params, context);
+  }
+
+  /**
+   * Get User Role.
+   *
+   * Get user role in the system.
+   *
+   * This method provides access only to the response body.
+   * To access the full response (for headers, for example), `getUserRole$Response()` instead.
+   *
+   * This method doesn't expect any request body.
+   */
+  getUserRole(params?: GetUserRole$Params, context?: HttpContext): Observable<string> {
+    return this.getUserRole$Response(params, context).pipe(
+      map((r: StrictHttpResponse<string>): string => r.body)
     );
   }
 
